@@ -1,4 +1,4 @@
-from person import Person
+from person.person import Person
 from encryption import Encryption
 
 class Teacher(Person):

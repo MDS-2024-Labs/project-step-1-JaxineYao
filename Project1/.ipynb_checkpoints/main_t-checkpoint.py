@@ -1,8 +1,3 @@
-from data_access import DataAccess
-from person.person import Person
-from person.student import Student
-from person.teacher import Teacher
-
 def main_menu():
     print("*****  Operation Menu *****")
     print("1: Add a student")
@@ -57,6 +52,3 @@ def main():
         else:
             print("Sorry, we do not have this function!")
         print("Press any key to continue...")
-        
-if __name__ == "__main__":
-    main()
