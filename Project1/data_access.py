@@ -1,8 +1,8 @@
 import csv
 from person.student import Student
 from person.teacher import Teacher
-from course import Course
-from grade import Grade
+from grade_management.course import Course
+from grade_management.grade import Grade
 
 class DataAccess:
     students_list = []
@@ -180,7 +180,7 @@ class DataAccess:
                 return
         print("Course not found.")
 
-  @staticmethod
+    @staticmethod
     def import_all_data_from_csv(file_path):
         """从单个CSV文件导入学生、课程和成绩数据"""
         try:
