@@ -3,6 +3,7 @@ from person.student import Student
 from person.teacher import Teacher
 from grade_management.course import Course
 from grade_management.grade import Grade
+from encryption import Encryption
 
 class DataAccess:
     students_list = []
@@ -50,15 +51,18 @@ class DataAccess:
             with open(file_path, mode='r', newline='', encoding='utf-8') as file:
                 reader = csv.DictReader(file)
                 for row in reader:
-                    user_id = row['id']
-                    name = row['name']
-                    password = row['password']
-                    role = row['role']
+                    user_id = row['ID']
+                    name = row['Name']
+                    password = str(row['Password'])
+                    role = row['Role']
+
+                    # Encrypt the password before storing it
+                    encrypted_password = Encryption.encrypt(password)
 
                     # 存储到 user_credentials 字典
                     DataAccess.user_credentials[user_id] = {
                         'name': name,
-                        'password': password,
+                        'password': encrypted_password,
                         'role': role
                     }
             print(f"User credentials imported successfully from {file_path}")
@@ -66,21 +70,32 @@ class DataAccess:
             print(f"File not found: {file_path}")
         except Exception as e:
             print(f"Error occurred during import: {e}")
+        
 
     @staticmethod
     def validate_student(student_id, password):
         """验证学生登录"""
         user = DataAccess.user_credentials.get(student_id)
-        if user and user['role'] == 'student' and user['password'] == password:
-            return True
+        if user and user['role'] == 'Student':
+            password = str(password)
+            decrypted_password = Encryption.decrypt(user['password'])
+            print(f"[DEBUG] Student Validation - Input ID: {student_id}, Input Password: {password}")
+            print(f"[DEBUG] Retrieved User: {user}, Decrypted Password: {decrypted_password}")
+            return decrypted_password == password
+        print(f"[DEBUG] Student Login - User not found or incorrect role: {student_id}")
         return False
 
     @staticmethod
     def validate_teacher(teacher_id, password):
         """验证老师登录"""
         user = DataAccess.user_credentials.get(teacher_id)
-        if user and user['role'] == 'teacher' and user['password'] == password:
-            return True
+        if user and user['role'] == 'Teacher':
+            password = str(password)
+            decrypted_password = Encryption.decrypt(user['password'])
+            print(f"[DEBUG] Teacher Login - Input Password: {password}, Decrypted Password: {decrypted_password}")
+            print(f"[DEBUG] Retrieved User: {user}, Decrypted Password: {decrypted_password}")
+            return decrypted_password == password
+        print(f"[DEBUG] Teacher Login - User not found or incorrect role: {teacher_id}")
         return False
 
     @staticmethod
@@ -187,35 +202,33 @@ class DataAccess:
             with open(file_path, mode='r', newline='', encoding='utf-8') as file:
                 reader = csv.DictReader(file)
                 for row in reader:
-                    student_id = row.get('student_id')
-                    name = row.get('name')
-                    gender = row.get('gender')
-                    course_id = row.get('course_id')
-                    course_name = row.get('course_name', 'Unknown')
-                    grade_value = row.get('grade')
-                    teacher_name = row.get('teacher_name')
+                    student_id = row.get('Student_ID')
+                    student_name = row.get('Name', 'Unknown')
+                    student_gender = row.get('Gender', 'Unknown')
+                    course_id = row.get('Course_ID')
+                    grade_value = row.get('Grade')
+                    course_name = row.get('Course_Name', 'Unknown')
+                    teacher_id = row.get('Teacher_ID')
 
                     # 添加Student对象
-                    student = next((s for s in DataAccess.students_list if s.student_id == student_id), None)
-                    if not student and student_id and name and gender:
-                        student = Student(name, gender, student_id)
+                    if student_id and not any(s.student_id == student_id for s in DataAccess.students_list):
+                        student = Student(student_id=student_id, name=student_name, gender=student_gender)
                         DataAccess.students_list.append(student)
-                        print(f"Student added: {student}")
+                        print(f"[DEBUG] Student added: {student}")
 
                     # 添加Course对象
-                    course = next((c for c in DataAccess.courses_list if c.course_id == course_id), None)
-                    if not course and course_id:
+                    if course_id and not any(c.course_id == course_id for c in DataAccess.courses_list):
                         course = Course(course_id=course_id, course_name=course_name)
                         DataAccess.courses_list.append(course)
-                        print(f"Course added: {course}")
+                        print(f"[DEBUG] Course added: {course}")
 
                     # 添加Grade对象
                     if grade_value and course_id and student_id:
-                        grade = Grade(student_id=student_id, course_id=course_id, grade=float(grade_value))
+                        grade = Grade(student_id=student_id, course_id=course_id, grade_value=float(grade_value))
                         DataAccess.grades_list.append(grade)
-                        print(f"Grade added for student {student_id} in course {course_id}.")
+                        print(f"[DEBUG] Grade added: {grade}")
 
-            print("All data imported successfully.")
+                print("All data imported successfully.")
         except FileNotFoundError:
             print("File not found. Please check the file path.")
         except Exception as e:

@@ -77,7 +77,7 @@ def teacher_menu():
         elif choice == "13":  # 导入 CSV 数据选项
             file_path = input("Enter the path to the CSV file: ")
             try:
-                DataAccess.import_data_from_csv(file_path)
+                DataAccess.import_all_data_from_csv(file_path)
                 print(f"Data imported successfully from {file_path}")
             except Exception as e:
                 print(f"Failed to import data: {e}")
@@ -92,15 +92,15 @@ def login():
         main_menu()
         choice = input("Please select an option: ")
         if choice == "1":
-            student_id = input("Enter your student ID: ")
-            password = input("Enter your password: ")
+            student_id = input("Enter your student ID: ").strip()
+            password = input("Enter your password: ").strip()
             if DataAccess.validate_student(student_id, password):
                 student_menu(student_id)
             else:
                 print("Invalid student ID or password.")
         elif choice == "2":
-            teacher_id = input("Enter your teacher ID: ")
-            password = input("Enter your password: ")
+            teacher_id = input("Enter your teacher ID: ").strip()
+            password = input("Enter your password: ").strip()
             if DataAccess.validate_teacher(teacher_id, password):
                 teacher_menu()
             else:
@@ -113,7 +113,7 @@ def login():
 
 if __name__ == "__main__":
     # 导入初始用户数据
-    credentials_path = "/Users/orange/user_credentials.csv"  # 您的CSV文件路径
+    credentials_path = "/Users/orange/project-step-1-JaxineYao/initial_login_data.csv"  # 您的CSV文件路径
     DataAccess.import_user_credentials(credentials_path)
     
     # 启动登录界面
