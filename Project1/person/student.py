@@ -1,7 +1,7 @@
 from person.person import Person
 
 class Student(Person):
-    def __init__(self, name, gender, student_id):
+    def __init__(self, name="Unknown", gender="Unknown", student_id=None):
         super().__init__(name, gender)
         self.student_id = student_id
         self.courses = []  # 存储学生已注册的课程
