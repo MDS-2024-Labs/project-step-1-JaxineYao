@@ -3,7 +3,7 @@ from encryption import Encryption
 
 class Teacher(Person):
     def __init__(self, name, teacher_id, login_name, password):
-        super().__init__(name=name, gender=None)  # `gender` 设置为 None，因为它不再需要
+        super().__init__(name=name, gender=None)  # `gender` is set to None because it is no longer needed
         self.teacher_id = teacher_id
         self.login_name = login_name
         self.password = Encryption.encrypt(password)

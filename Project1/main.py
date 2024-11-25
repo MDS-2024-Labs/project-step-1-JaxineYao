@@ -15,17 +15,17 @@ def main_menu():
     print("0: Exit")
 
 if __name__ == "__main__":
-    # 导入初始用户数据
-    credentials_path = "initial_login_data.csv"  # 学生和教师登录的 CSV 文件路径
+    # Import initial user data
+    credentials_path = "/Users/orange/project/1125/project-step-1-JaxineYao/initial_login_data.csv"  # Path to the CSV file for student and teacher login
     DataAccess.import_user_credentials(credentials_path)
     
-    # 默认导入教师上传的完整数据
-    default_teacher_data_path = "teacher_upload_full_data.csv"  # 默认教师上传文件路径
+    # Import the default data uploaded by the teacher
+    default_teacher_data_path = "/Users/orange/project/1125/project-step-1-JaxineYao/teacher_upload_full_data.csv"  # Default path for the teacher's uploaded file
     try:
         DataAccess.import_all_data_from_csv(default_teacher_data_path)
         print(f"Default data imported successfully from {default_teacher_data_path}")
     except Exception as e:
         print(f"Failed to import default data: {e}")
     
-    # 启动登录界面
+    # Start the login interface
     login()
