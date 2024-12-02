@@ -2,28 +2,37 @@
 
 ## Description
 
-This project is designed to manage student and course data, along with grade records. It consists of two sub-packages: `person` and `grade_management`. The `person` package manages information about students, teachers, and general user data, while the `grade_management` package handles courses, grade records, and statistical analysis.
+This project provides a comprehensive system for managing student data, course information, and grade records. It is organized into multiple packages, each handling specific aspects of the application:  
+1.`person`: Handles personal information for students and teachers.  
+2.`grade_management`: Manages courses and grades.  
+3.`data_access_analysis`: Handles data storage, retrieval, and analysis.  
+4.Additional Utilities: Includes `encryption` and `menu` functionalists.  
 
 ## Directory Structure
 Directory Structure
 ```
 Project1/
-├── person/                    # Sub-package 1: Manages personal information
-│   ├── init.py
-│   ├── person.py
-│   ├── student.py
-│   └── teacher.py
+├── data_access_analysis/       # Handles data access and analysis
+│   ├── __init__.py
+│   ├── data_access.py          # Manages data storage and retrieval
+│   └── data_analysis.py        # Provides analysis tools for grades
 │
-├── grade_management/          # Sub-package 2: Handles courses and grades
-│   ├── init.py
-│   ├── course.py
-│   ├── grade.py
-│   └── statistics.py
+├── grade_management/           # Manages courses and grades
+│   ├── __init__.py
+│   ├── course.py               # Defines courses and their attributes
+│   └── grade.py                # Manages grades and related operations
 │
-├── main.py                    # Main entry point for the application
-├── test.py                    # Test file demonstrating the package functionality
-├── README.md                  # Documentation file
-└── .gitignore                 # Ignore unnecessary files
+├── person/                     # Manages personal information
+│   ├── __init__.py
+│   ├── person.py               # Base class for Person
+│   ├── student.py              # Student class, inherits Person
+│   └── teacher.py              # Teacher class, inherits Person
+│
+├── encryption.py               # Handles data encryption and decryption
+├── menu.py                     # Implements the main application menu
+├── main.py                     # Main entry point for the application
+├── README.md                   # Project documentation
+└── readme_files/               # Additional resources for the documentation
 ```
 ---
 
@@ -74,8 +83,60 @@ Manages course information, grade records, and statistical analysis.
 3. **`statistics.py`**:
    - **Statistics**: Provides tools to calculate and visualize grade data.
    - **Methods**:
-     - `calculate_statistics(grades)`: Calculates `max`, `min`, and `median` from a list of grades.
+     - `calculate_statistics(grades)`: Calculates `max`, `min`, and `median` from a list of grades.  
      - `plot_distribution(grades)`: Generates a histogram to visualize grade distribution.
+
+---
+
+### 3. `data_access_analysis`
+
+#### Purpose:
+  This package provides functionality for managing data storage, retrieval, and analysis. It ensures efficient handling of student, teacher, and grade data while offering tools for extracting meaningful insights through statistical analysis.
+
+#### Modules:
+
+1. **`data_access.py`**:
+   - **Data_access**: Provides methods for storing and retrieving data, including student and teacher information.
+   - **Methods**:
+     - `add_student()`: Adds a new student to the system.
+     - `add_teacher()`: Adds a new teacher to the system.
+     - `list_all_students()`: Lists all students currently stored in the system.
+     - `list_all_teachers()`: Lists all teachers currently stored in the system.
+     - `add_course()`: Adds a new course to the system.
+     - `add_grade()`: Adds a grade for a student in a specific course.
+     - `get_student_by_id(student_id: str)`: Retrieves a student’s details by their ID.
+     - `get_course_by_id(course_id: str)`: Retrieves a course’s details by its ID.
+     - `import_all_data_from_csv(file_path: str)`: Imports student, teacher, course, and grade data from a CSV file.
+
+2. **`data_analysis.py`**:
+   - **Data_analysis**: Offers tools for analyzing grade data, including calculating averages and generating visualizations.
+   - **Methods**:
+     - `add_grade(student_id, course_id, grade_value)`: Records a grade.
+     - `get_grades_by_course(course_id)`: Retrieves all grades for a specific course.
+     
+---
+
+### 4. `Additional Utilities`
+
+#### Purpose:
+  This section provides supporting utilities to enhance the security and user interaction of the application:
+	•	encryption.py: Secures sensitive data using encryption.
+	•	menu.py: Implements the main menu logic for seamless user interaction.
+
+#### Modules:
+
+1. **`encryption.py`**:
+   - **Data_access**: Provides encryption and decryption utilities to secure sensitive data.
+   - **Methods**:
+     - `encrypt(data: str)`: str: Encrypts a given string and returns the encrypted version.
+     - `decrypt(data: str)`: str: Decrypts a previously encrypted string and returns the original version.
+
+2. **`menu.py`**:
+   - **Data_analysis**: Implements the main menu logic to interact with different features of the application.
+   - **Methods**:
+     - `display_menu()`: Displays the main menu options to the user.
+     - `process_choice(choice: int)`: Processes the user’s choice and directs them to the corresponding functionality.
+     - `exit_program()`: Handles the exit process for the application.
 
 ---
 
@@ -112,13 +173,11 @@ Grade.add_grade(student_id="S2", course_id="C1", grade_value=90)
 grades = Grade.get_grades_by_course("C1")
 print(grades)  # Output: [{'student_id': 'S1', 'course_id': 'C1', 'grade': 85}, ...]
 ```
-3. Calculating Statistics
+3. Data Analysis
 ```python
-from grade_management.statistics import Statistics
+from data_access_analysis.data_analysis import DataAnalysis
 
-grades = [{"grade": 85}, {"grade": 90}, {"grade": 78}]
-stats = Statistics.calculate_statistics(grades)
-print(stats)  # Output: {'max': 90, 'min': 78, 'median': 85}
+DataAnalysis.display_average_grade("S1")
 ```
 Testing
 
