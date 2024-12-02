@@ -80,12 +80,6 @@ Manages course information, grade records, and statistical analysis.
      - `add_grade(student_id, course_id, grade_value)`: Records a grade.
      - `get_grades_by_course(course_id)`: Retrieves all grades for a specific course.
 
-3. **`statistics.py`**:
-   - **Statistics**: Provides tools to calculate and visualize grade data.
-   - **Methods**:
-     - `calculate_statistics(grades)`: Calculates `max`, `min`, and `median` from a list of grades.  
-     - `plot_distribution(grades)`: Generates a histogram to visualize grade distribution.
-
 ---
 
 ### 3. `data_access_analysis`
