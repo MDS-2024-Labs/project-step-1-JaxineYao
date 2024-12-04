@@ -12,4 +12,6 @@ class Encryption:
     @staticmethod
     def decrypt(text):
         """Decrypt the input text."""
+        if text is None:
+            raise ValueError("Cannot decrypt None value") 
         return Encryption.cipher_suite.decrypt(text.encode()).decode()
