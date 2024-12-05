@@ -12,7 +12,7 @@ class DataAccess:
     teachers_list = []
     courses_list = []
     grades_list = []
-    user_credentials = {}  # 用于存储学生和老师的账号信息
+    user_credentials = {} #for storing the students and teacher's information
 
     @staticmethod
     def add_student():
@@ -24,7 +24,7 @@ class DataAccess:
                 name = input("Input student name: ")
                 gender = input("Input student gender (M/F): ")
 
-                # 检查是否已有相同 student_id 的学生
+                 #check whether we have the same id
                 existing_student = next((s for s in DataAccess.students_list if s.student_id == student_id), None)
 
                 if existing_student:
@@ -32,18 +32,18 @@ class DataAccess:
                     choice = input("Do you want to overwrite this student? (Y/N): ").strip().lower()
 
                     if choice == 'y':
-                        # 覆盖学生信息
+                        
                         existing_student.name = name
                         existing_student.gender = gender
                         print(f"Student with ID {student_id} updated successfully!")
                     elif choice == 'n':
-                        # 打印所有现有学生 ID 并重新输入
+                        
                         print("Existing Student IDs: ", [s.student_id for s in DataAccess.students_list])
                         print("Please input a new student ID.")
                     else:
                         print("Invalid choice. Please try again.")
                 else:
-                    # 如果未找到相同的 student_id，添加新学生
+                    
                     student = Student(name, gender, student_id)
                     DataAccess.students_list.append(student)
                     print("Student added successfully!")
@@ -61,7 +61,7 @@ class DataAccess:
                 login_name = input("Input teacher login name: ")
                 password = input("Input teacher password: ")
 
-                # 检查是否已有相同 teacher_id 的老师
+                
                 existing_teacher = next((t for t in DataAccess.teachers_list if t.teacher_id == teacher_id), None)
 
                 if existing_teacher:
@@ -69,7 +69,7 @@ class DataAccess:
                     choice = input("Do you want to overwrite this teacher? (Y/N): ").strip().lower()
 
                     if choice == 'y':
-                        # 覆盖老师信息
+                        
                         existing_teacher.name = name
                         existing_teacher.login_name = login_name
                         existing_teacher.password = password
@@ -80,7 +80,7 @@ class DataAccess:
                     else:
                         print("Invalid choice. Please try again.")
                 else:
-                    # 如果未找到相同的 teacher_id，添加新老师
+                   
                     teacher = Teacher(name=name, teacher_id=teacher_id, login_name=login_name, password=password)
                     DataAccess.teachers_list.append(teacher)
                     print("Teacher added successfully!")
@@ -89,7 +89,7 @@ class DataAccess:
 
     @staticmethod
     def import_user_credentials(file_path):
-        """从CSV文件导入用户账号和密码信息"""
+        """from CSV into id and password"""
         try:
             with open(file_path, mode='r', newline='', encoding='utf-8') as file:
                 reader = csv.DictReader(file)
@@ -102,7 +102,6 @@ class DataAccess:
                     # Encrypt the password before storing it
                     encrypted_password = Encryption.encrypt(password)
 
-                    # 存储到 user_credentials 字典
                     DataAccess.user_credentials[user_id] = {
                         'name': name,
                         'password': encrypted_password,
@@ -117,28 +116,45 @@ class DataAccess:
 
     @staticmethod
     def validate_student(student_id, password):
-        """验证学生登录"""
+        """
+        Validates a student's credentials.
+        
+        Parameters:
+            student_id (str): The ID of the student.
+            password (str): The input password to validate.
+
+        Returns:
+            bool: True if credentials are valid, False otherwise.
+        """
         user = DataAccess.user_credentials.get(student_id)
         if user and user['role'] == 'Student':
             password = str(password)
             decrypted_password = Encryption.decrypt(user['password'])
-            print(f"[DEBUG] Student Validation - Input ID: {student_id}, Input Password: {password}")
-            print(f"[DEBUG] Retrieved User: {user}, Decrypted Password: {decrypted_password}")
+            print(f"Student Validation - Input ID: {student_id}, Input Password: {password}")
+
             return decrypted_password == password
-        print(f"[DEBUG] Student Login - User not found or incorrect role: {student_id}")
+        print(f"Student Login - User not found or incorrect role: {student_id}")
         return False
 
     @staticmethod
     def validate_teacher(teacher_id, password):
-        """验证老师登录"""
+        """
+        Validates a teacher's credentials.
+        
+        Parameters:
+            teacher_id (str): The ID of the teacher.
+            password (str): The input password to validate.
+
+        Returns:
+            bool: True if credentials are valid, False otherwise.
+        """
         user = DataAccess.user_credentials.get(teacher_id)
         if user and user['role'] == 'Teacher':
             password = str(password)
             decrypted_password = Encryption.decrypt(user['password'])
-            print(f"[DEBUG] Teacher Login - Input Password: {password}, Decrypted Password: {decrypted_password}")
-            print(f"[DEBUG] Retrieved User: {user}, Decrypted Password: {decrypted_password}")
+            print(f"Teacher Login - Input Password: {password}, Decrypted Password: {decrypted_password}")
             return decrypted_password == password
-        print(f"[DEBUG] Teacher Login - User not found or incorrect role: {teacher_id}")
+        print(f"Teacher Login - User not found or incorrect role: {teacher_id}")
         return False
 
     @staticmethod
@@ -150,7 +166,6 @@ class DataAccess:
                     break
                 course_name = input("Input course name: ")
 
-                # 检查是否已有相同 course_id 的课程
                 existing_course = next((c for c in DataAccess.courses_list if c.course_id == course_id), None)
 
                 if existing_course:
@@ -158,7 +173,6 @@ class DataAccess:
                     choice = input("Do you want to overwrite this course? (Y/N): ").strip().lower()
 
                     if choice == 'y':
-                        # 覆盖课程信息
                         existing_course.course_name = course_name
                         print(f"Course with ID {course_id} updated successfully!")
                     elif choice == 'n':
@@ -167,7 +181,6 @@ class DataAccess:
                     else:
                         print("Invalid choice. Please try again.")
                 else:
-                    # 如果未找到相同的 course_id，添加新课程
                     course = Course(course_name, course_id)
                     DataAccess.courses_list.append(course)
                     print("Course added successfully!")
@@ -184,7 +197,7 @@ class DataAccess:
                 course_id = input("Enter Course ID: ")
                 grade_value = float(input("Enter Grade Value: "))
 
-                # 检查是否已有相同 student_id 和 course_id 的成绩
+
                 existing_grade = next(
                     (g for g in DataAccess.grades_list if g.student_id == student_id and g.course_id == course_id),
                     None
@@ -206,7 +219,7 @@ class DataAccess:
                     else:
                         print("Invalid choice. Please try again.")
                 else:
-                    # 如果未找到相同的 student_id 和 course_id，添加新成绩
+                    
                     grade = Grade(student_id, course_id, grade_value)
                     DataAccess.grades_list.append(grade)
                     print("Grade added successfully!")
@@ -247,7 +260,7 @@ class DataAccess:
 
     @staticmethod
     def get_student_by_id(student_id):
-        """根据学生ID查找学生信息"""
+
         for student in DataAccess.students_list:
             if student.student_id == student_id:
                 print(student)
@@ -256,7 +269,7 @@ class DataAccess:
 
     @staticmethod
     def get_grade_by_student_and_course(student_id, course_id):
-        """根据学生ID和课程ID查找特定成绩"""
+
         for grade in DataAccess.grades_list:
             if grade.student_id == student_id and grade.course_id == course_id:
                 print(f"Grade found: {grade}")
@@ -265,7 +278,7 @@ class DataAccess:
 
 
     def get_teacher_by_id(teacher_id):
-        """根据老师ID查找老师信息"""
+
         for teacher in DataAccess.teachers_list:
             if teacher.teacher_id == teacher_id:
                 print(teacher)
@@ -274,7 +287,7 @@ class DataAccess:
 
     @staticmethod
     def get_course_by_id(course_id):
-        """根据课程ID查找课程信息"""
+
         for course in DataAccess.courses_list:
             if course.course_id == course_id:
                 print(course)
@@ -283,7 +296,7 @@ class DataAccess:
 
     @staticmethod
     def get_grades_by_student_id(student_id):
-        """根据学生ID查找学生的所有成绩"""
+
         found = False
         for grade in DataAccess.grades_list:
             if grade.student_id == student_id:
@@ -294,20 +307,20 @@ class DataAccess:
 
     @staticmethod
     def import_all_data_from_csv(file_path):
-        """从单个CSV文件导入学生、课程和成绩数据，并关联到现有列表"""
+        """import student, course, and grade data from a single CSV file and associate it with existing lists."""
         try:
             with open(file_path, mode='r', newline='', encoding='utf-8') as file:
                 reader = csv.DictReader(file)
                 for row in reader:
                     # 提取数据
                     student_id = row.get('Student_ID')
-                    student_name = row.get('Student_Name', None)  # 默认值改为 None
+                    student_name = row.get('Student_Name', None)
                     student_gender = row.get('Gender', 'Unknown')
                     course_id = row.get('Course_ID')
                     course_name = row.get('Course_Name', 'Unknown')
                     grade_value = row.get('Grade_Value')
                     teacher_id = row.get('Teacher_ID')
-                    teacher_name = row.get('Teacher_Name', None)  # 默认值改为 None
+                    teacher_name = row.get('Teacher_Name', None)
 
                     # 添加学生
                     if student_id and not any(s.student_id == student_id for s in DataAccess.students_list):
@@ -317,14 +330,14 @@ class DataAccess:
 
                     # 添加老师
                     if teacher_id and not any(t.teacher_id == teacher_id for t in DataAccess.teachers_list):
-                        if teacher_name is None:  # 如果 teacher_name 为 None，设置默认名称
+                        if teacher_name is None:
                             teacher_name = f"Teacher_{teacher_id}"
 
                         teacher = Teacher(
-                            name=teacher_name,  # 确保传递的 name 不为 None
+                            name=teacher_name, 
                             teacher_id=teacher_id,
                             login_name=teacher_id,
-                            password="default_password"  # 默认密码
+                            password="default_password" 
                         )
                         DataAccess.teachers_list.append(teacher)
                         print(f"[DEBUG] Added Teacher: {teacher}")
@@ -355,7 +368,7 @@ class DataAccess:
     def get_statistics(course_id):
         for grade in DataAccess.grades_list:
             print(f"Student ID: {grade.student_id}, Course ID: {grade.course_id}, Grade: {grade.grade_value}")
-        """计算并展示特定课程的成绩统计信息"""
+
         grades = [g.grade_value for g in DataAccess.grades_list if g.course_id.strip() == course_id.strip()]
         if not grades:
             print(f"No grades available for Course ID {course_id}.")
@@ -384,7 +397,7 @@ class DataAccess:
         for g in DataAccess.grades_list:
             print(f"Stored: Student ID: '{g.student_id}', Course ID: '{g.course_id}', Grade: {g.grade_value}")
         
-        # 在这里筛选
+
         found_grade = next(
             (g for g in DataAccess.grades_list if g.student_id.strip() == student_id.strip() and g.course_id.strip() == course_id.strip()),
             None
