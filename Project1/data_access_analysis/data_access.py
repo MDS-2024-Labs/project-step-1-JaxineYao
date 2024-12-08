@@ -18,33 +18,27 @@ class DataAccess:
     def add_student():
         while True:
             try:
-                student_id = input("Input student ID (or '-1' to end): ")
+                student_id = input("Input student ID (or '-1' to end): ").strip()
                 if student_id == "-1":
                     break
-                name = input("Input student name: ")
-                gender = input("Input student gender (M/F): ")
+                name = input("Input student name: ").strip()
+                gender = input("Input student gender (M/F): ").strip().upper()
 
-                 #check whether we have the same id
                 existing_student = next((s for s in DataAccess.students_list if s.student_id == student_id), None)
 
                 if existing_student:
                     print(f"Student ID {student_id} already exists.")
                     choice = input("Do you want to overwrite this student? (Y/N): ").strip().lower()
-
-                    if choice == 'y':
-                        
+                    if choice == "y":
                         existing_student.name = name
-                        existing_student.gender = gender
+                        existing_student.gender = "Male" if gender == "M" else "Female"
                         print(f"Student with ID {student_id} updated successfully!")
-                    elif choice == 'n':
-                        
-                        print("Existing Student IDs: ", [s.student_id for s in DataAccess.students_list])
-                        print("Please input a new student ID.")
+                    elif choice == "n":
+                        print("Student addition cancelled. Please input a new student ID.")
                     else:
                         print("Invalid choice. Please try again.")
                 else:
-                    
-                    student = Student(name, gender, student_id)
+                    student = Student(name, "Male" if gender == "M" else "Female", student_id)
                     DataAccess.students_list.append(student)
                     print("Student added successfully!")
             except ValueError:
@@ -60,33 +54,39 @@ class DataAccess:
                 name = input("Input teacher name: ")
                 login_name = input("Input teacher login name: ")
                 password = input("Input teacher password: ")
+                if not teacher_id:
+                    print("[DEBUG] Invalid teacher ID.")
+                    continue
 
+                if not name:
+                    print("[DEBUG] Teacher name cannot be empty.")
+                    continue
                 
                 existing_teacher = next((t for t in DataAccess.teachers_list if t.teacher_id == teacher_id), None)
 
                 if existing_teacher:
                     print(f"Teacher ID {teacher_id} already exists.")
-                    choice = input("Do you want to overwrite this teacher? (Y/N): ").strip().lower()
-
-                    if choice == 'y':
-                        
-                        existing_teacher.name = name
-                        existing_teacher.login_name = login_name
-                        existing_teacher.password = password
-                        print(f"Teacher with ID {teacher_id} updated successfully!")
-                    elif choice == 'n':
-                        print("Existing Teacher IDs: ", [t.teacher_id for t in DataAccess.teachers_list])
-                        print("Please input a new teacher ID.")
-                    else:
-                        print("Invalid choice. Please try again.")
+                    while True:
+                        choice = input("Do you want to overwrite this teacher? (Y/N): ").strip().lower()
+                        if choice == 'y':
+                            existing_teacher.name = name
+                            existing_teacher.login_name = login_name
+                            existing_teacher.password = Encryption.encrypt(password)
+                            print(f"Teacher with ID {teacher_id} updated successfully!")
+                            break
+                        elif choice == 'n':
+                            print("Existing Teacher IDs: ", [t.teacher_id for t in DataAccess.teachers_list])
+                            print("Please input a new teacher ID.")
+                            break
+                        else:
+                            print("Invalid choice. Please try again.")
                 else:
-                   
                     teacher = Teacher(name=name, teacher_id=teacher_id, login_name=login_name, password=password)
                     DataAccess.teachers_list.append(teacher)
                     print("Teacher added successfully!")
-            except ValueError:
-                print("Please input valid data.")
-
+            except Exception as e:
+                print(f"An unexpected error occurred: {e}")
+                
     @staticmethod
     def import_user_credentials(file_path):
         """from CSV into id and password"""
@@ -161,42 +161,46 @@ class DataAccess:
     def add_course():
         while True:
             try:
-                course_id = input("Input course ID (or '-1' to end): ")
+                course_id = input("Input course ID (or '-1' to end): ").strip()
                 if course_id == "-1":
                     break
-                course_name = input("Input course name: ")
+                course_name = input("Input course name: ").strip()
 
                 existing_course = next((c for c in DataAccess.courses_list if c.course_id == course_id), None)
 
                 if existing_course:
                     print(f"Course ID {course_id} already exists.")
-                    choice = input("Do you want to overwrite this course? (Y/N): ").strip().lower()
-
-                    if choice == 'y':
-                        existing_course.course_name = course_name
-                        print(f"Course with ID {course_id} updated successfully!")
-                    elif choice == 'n':
-                        print("Existing Course IDs: ", [c.course_id for c in DataAccess.courses_list])
-                        print("Please input a new course ID.")
-                    else:
-                        print("Invalid choice. Please try again.")
+                    while True:
+                        choice = input("Do you want to overwrite this course? (Y/N): ").strip().lower()
+                        if choice == 'y':
+                            existing_course.course_name = course_name
+                            print(f"Course with ID {course_id} updated successfully!")
+                        elif choice == 'n':
+                            print("Existing Course IDs: ", [c.course_id for c in DataAccess.courses_list])
+                            print("Please input a new course ID.")
+                            break
+                        else:
+                            print("Invalid choice. Please try again.")
                 else:
-                    course = Course(course_name, course_id)
+                    course = Course(course_name=course_name, course_id=course_id)
                     DataAccess.courses_list.append(course)
                     print("Course added successfully!")
-            except ValueError:
-                print("Please input valid data.")
+            except Exception as e:
+                print(f"An unexpected error occurred: {e}")
 
     @staticmethod
     def add_grade():
         while True:
             try:
-                student_id = input("Enter Student ID (or '-1' to end): ")
+                student_id = input("Enter Student ID (or '-1' to end): ").strip()
                 if student_id == "-1":
                     break
-                course_id = input("Enter Course ID: ")
-                grade_value = float(input("Enter Grade Value: "))
+                course_id = input("Enter Course ID: ").strip()
+                grade_value = float(input("Enter Grade Value (0-100): ").strip())
 
+                if not (0 <= grade_value <= 100):
+                    print("Grade value must be between 0 and 100. Please try again.")
+                    continue
 
                 existing_grade = next(
                     (g for g in DataAccess.grades_list if g.student_id == student_id and g.course_id == course_id),
@@ -205,26 +209,27 @@ class DataAccess:
 
                 if existing_grade:
                     print(f"Grade for Student ID {student_id} in Course ID {course_id} already exists.")
-                    choice = input("Do you want to overwrite this grade? (Y/N): ").strip().lower()
-
-                    if choice == 'y':
-                        # 覆盖成绩信息
-                        existing_grade.grade_value = grade_value
-                        print(f"Grade for Student ID {student_id} in Course ID {course_id} updated successfully!")
-                    elif choice == 'n':
-                        print("Existing Grades: ", [
-                            (g.student_id, g.course_id) for g in DataAccess.grades_list
-                        ])
-                        print("Please input a new combination of Student ID and Course ID.")
-                    else:
-                        print("Invalid choice. Please try again.")
+                    while True:
+                        choice = input("Do you want to overwrite this grade? (Y/N): ").strip().lower()
+                        if choice == 'y':
+                            existing_grade.grade_value = grade_value
+                            print(f"Grade for Student ID {student_id} in Course ID {course_id} updated successfully!")
+                        elif choice == 'n':
+                            print("Existing Grades: ", [
+                                (g.student_id, g.course_id) for g in DataAccess.grades_list
+                            ])
+                            print("Please input a new combination of Student ID and Course ID.")
+                            break
+                        else:
+                            print("Invalid choice. Please try again.")
                 else:
-                    
-                    grade = Grade(student_id, course_id, grade_value)
+                    grade = Grade(student_id=student_id, course_id=course_id, grade_value=grade_value)
                     DataAccess.grades_list.append(grade)
                     print("Grade added successfully!")
             except ValueError:
-                print("Please input valid data.")
+                print("Invalid grade value. Please input a number.")
+            except Exception as e:
+                print(f"An unexpected error occurred: {e}")
 
     @staticmethod
     def list_all_students():

@@ -2,16 +2,17 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from data_access_analysis.data_access import DataAccess  
 from grade_management.grade import Grade
-
+import logging
+logging.basicConfig(level=logging.INFO)
 class DataAnalysis:
     @staticmethod
-    def display_average_grade(student_id):
-        grades = [g.grade_value for g in DataAccess.grades_list if g.student_id == student_id]
-        if grades:
-            average_grade = sum(grades) / len(grades)
-            print(f"Average grade for Student ID {student_id}: {average_grade:.2f}")
-        else:
-            print(f"No grades found for Student ID {student_id}.")
+    def display_average_grade(course_id):
+        grades = [g.grade_value for g in DataAccess.grades_list if g.course_id == course_id]
+        if not grades:
+            print(f"No grades available for Course ID {course_id}.")
+            return
+        average = sum(grades) / len(grades)
+        print(f"Average grade for Course ID {course_id} is {average:.2f}.")
 
     @staticmethod
     def convert_grades_to_gpa(student_id):

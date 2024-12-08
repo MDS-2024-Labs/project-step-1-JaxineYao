@@ -34,5 +34,22 @@ class TestStudent(unittest.TestCase):
         self.assertEqual(len(self.student.courses), 1, "Student should be enrolled in exactly one course.")
         self.assertEqual(str(self.student.courses[0]), str(course), "The course details should match the enrolled course.")
 
+    def test_student_multiple_enrollments(self):
+        course1 = Course("Math 101", "M101")
+        course2 = Course("Science 101", "S101")
+        self.student.enroll_course(course1)
+        self.student.enroll_course(course2)
+        self.assertIn(course1, self.student.courses, "Course 1 should be added to the student's course list.")
+        self.assertIn(course2, self.student.courses, "Course 2 should be added to the student's course list.")
+        self.assertEqual(len(self.student.courses), 2, "Student should be enrolled in exactly two courses.")
+
+    def test_student_list_courses(self):
+        course1 = Course("Math 101", "M101")
+        course2 = Course("Science 101", "S101")
+        self.student.enroll_course(course1)
+        self.student.enroll_course(course2)
+        course_list = self.student.list_courses()
+        self.assertEqual(course_list, [str(course1), str(course2)], "The course list should match the enrolled courses.")
+
 if __name__ == '__main__':
     unittest.main()
