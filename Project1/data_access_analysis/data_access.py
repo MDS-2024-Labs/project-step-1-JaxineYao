@@ -395,11 +395,7 @@ class DataAccess:
     @staticmethod
     def get_grade_and_statistics(student_id, course_id):
         print(f"Searching for Student ID: '{student_id}' and Course ID: '{course_id}'")
-        print("Current grades_list content:")
-        for g in DataAccess.grades_list:
-            print(f"Stored: Student ID: '{g.student_id}', Course ID: '{g.course_id}', Grade: {g.grade_value}")
-        
-
+            
         found_grade = next(
             (g for g in DataAccess.grades_list if g.student_id.strip() == student_id.strip() and g.course_id.strip() == course_id.strip()),
             None

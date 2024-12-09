@@ -6,13 +6,15 @@ import logging
 logging.basicConfig(level=logging.INFO)
 class DataAnalysis:
     @staticmethod
-    def display_average_grade(course_id):
-        grades = [g.grade_value for g in DataAccess.grades_list if g.course_id == course_id]
+    def display_average_grade(student_id):
+        # Filter grades for the given student ID
+        grades = [g.grade_value for g in DataAccess.grades_list if g.student_id == student_id]
         if not grades:
-            print(f"No grades available for Course ID {course_id}.")
+            print(f"No grades available for Student ID {student_id}.")
             return
+        # Calculate the average grade
         average = sum(grades) / len(grades)
-        print(f"Average grade for Course ID {course_id} is {average:.2f}.")
+        print(f"Average grade for Student ID {student_id} is {average:.2f}.")
 
     @staticmethod
     def convert_grades_to_gpa(student_id):

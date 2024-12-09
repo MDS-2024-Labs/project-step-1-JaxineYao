@@ -126,7 +126,7 @@ def teacher_menu():
             elif choice == "12":
                 student_id = input("Enter student ID: ").strip()
                 course_id = input("Enter course ID: ").strip()
-                Grade.get_grade_and_statistics(student_id, course_id)
+                DataAccess.get_grade_and_statistics(student_id, course_id)
             elif choice == "13":
                 file_path = input("Enter the path to the CSV file: ").strip()
                 DataAccess.import_all_data_from_csv(file_path)
