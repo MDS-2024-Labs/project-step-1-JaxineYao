@@ -317,7 +317,7 @@ class DataAccess:
             with open(file_path, mode='r', newline='', encoding='utf-8') as file:
                 reader = csv.DictReader(file)
                 for row in reader:
-                    # 提取数据
+     
                     student_id = row.get('Student_ID')
                     student_name = row.get('Student_Name', None)
                     student_gender = row.get('Gender', 'Unknown')
@@ -327,13 +327,11 @@ class DataAccess:
                     teacher_id = row.get('Teacher_ID')
                     teacher_name = row.get('Teacher_Name', None)
 
-                    # 添加学生
+                    
                     if student_id and not any(s.student_id == student_id for s in DataAccess.students_list):
                         student = Student(name=student_name or "Unnamed Student", gender=student_gender, student_id=student_id)
                         DataAccess.students_list.append(student)
-                        print(f"[DEBUG] Added Student: {student}")
-
-                    # 添加老师
+                    
                     if teacher_id and not any(t.teacher_id == teacher_id for t in DataAccess.teachers_list):
                         if teacher_name is None:
                             teacher_name = f"Teacher_{teacher_id}"
@@ -345,15 +343,14 @@ class DataAccess:
                             password="default_password" 
                         )
                         DataAccess.teachers_list.append(teacher)
-                        print(f"[DEBUG] Added Teacher: {teacher}")
+                     
 
-                    # 添加课程
+                    
                     if course_id and not any(c.course_id == course_id for c in DataAccess.courses_list):
                         course = Course(course_name=course_name, course_id=course_id)
                         DataAccess.courses_list.append(course)
-                        print(f"[DEBUG] Added Course: {course}")
-
-                    # 添加成绩
+                        
+                        
                     if grade_value and student_id and course_id:
                         if not any(
                             g.student_id == student_id and g.course_id == course_id
@@ -361,7 +358,7 @@ class DataAccess:
                         ):
                             grade = Grade(student_id=student_id, course_id=course_id, grade_value=float(grade_value))
                             DataAccess.grades_list.append(grade)
-                            print(f"[DEBUG] Added Grade: {grade}")
+                        
                 
                 print(f"Data imported successfully from {file_path}")
         except FileNotFoundError:
