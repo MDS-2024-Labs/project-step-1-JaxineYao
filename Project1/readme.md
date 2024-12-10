@@ -182,3 +182,6 @@ python test.py
 ## Version Control
 
 All group members collaborated using Git. The commit history demonstrates equal contributions. The repository includes separate branches for each sub-package, and merge commits track collaboration.
+
+##  PyPi link
+https://pypi.org/project/StudentAndGradeManagementPackage/
