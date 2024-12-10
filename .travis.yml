@@ -8,4 +8,4 @@ python:
   - "3.12"
 
 script:
-  - Project1/test/modified_test_main.py
+  - modified_test_main.py
