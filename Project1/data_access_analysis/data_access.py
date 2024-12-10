@@ -368,9 +368,6 @@ class DataAccess:
             
     @staticmethod
     def get_statistics(course_id):
-        for grade in DataAccess.grades_list:
-            print(f"Student ID: {grade.student_id}, Course ID: {grade.course_id}, Grade: {grade.grade_value}")
-
         grades = [g.grade_value for g in DataAccess.grades_list if g.course_id.strip() == course_id.strip()]
         if not grades:
             print(f"No grades available for Course ID {course_id}.")
