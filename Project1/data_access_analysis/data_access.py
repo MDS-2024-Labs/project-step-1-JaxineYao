@@ -394,15 +394,27 @@ class DataAccess:
 
     @staticmethod
     def get_grade_and_statistics(student_id, course_id):
+        """
+        Retrieves the grade of a specific student for a specific course.
+
+        Args:
+            student_id (str): The ID of the student.
+            course_id (str): The ID of the course.
+
+        Returns:
+            str: The grade value if found, or an appropriate message if not.
+        """
         print(f"Searching for Student ID: '{student_id}' and Course ID: '{course_id}'")
-            
+        
+        # Search for the grade in the grades_list
         found_grade = next(
             (g for g in DataAccess.grades_list if g.student_id.strip() == student_id.strip() and g.course_id.strip() == course_id.strip()),
             None
         )
 
         if found_grade:
-            print(f"Found Grade: Student ID {found_grade.student_id}, Course ID {found_grade.course_id}, Grade {found_grade.grade_value}")
-            DataAccess.get_statistics(course_id)
+            print(f"Found Grade: {found_grade.grade_value}")
+            return found_grade.grade_value
         else:
             print(f"No grade found for Student ID: {student_id} and Course ID: {course_id}.")
+            return None

@@ -103,16 +103,16 @@ def teacher_menu():
             elif choice == "4":
                 DataAccess.add_grade()
             elif choice == "5":
-                print("[DEBUG] Calling list_all_students...")
+                print("Calling list_all_students...")
                 DataAccess.list_all_students()
             elif choice == "6":
-                print("[DEBUG] Calling list_all_courses...")
+                print("Calling list_all_courses...")
                 DataAccess.list_all_courses()
             elif choice == "7":
-                print("[DEBUG] Calling list_all_teachers...")
+                print("Calling list_all_teachers...")
                 DataAccess.list_all_teachers()
             elif choice == "8":
-                print("[DEBUG] Calling list_all_grades...")
+                print("Calling list_all_grades...")
                 DataAccess.list_all_grades()
             elif choice == "9":
                 student_id = input("Enter student ID: ").strip()
@@ -136,4 +136,4 @@ def teacher_menu():
             else:
                 print("Invalid option. Please try again.")
         except Exception as e:
-            print(f"[DEBUG] An error occurred: {e}")  # Catch all exceptions for debugging
+            print(f"An error occurred: {e}")  # Catch all exceptions for debugging
