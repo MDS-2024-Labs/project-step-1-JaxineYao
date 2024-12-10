@@ -8,4 +8,4 @@ python:
   - "3.12"
 
 script:
-  - python -m unittest discover -s test -p "*.py"
+  - Project1/test/modified_test_main.py
