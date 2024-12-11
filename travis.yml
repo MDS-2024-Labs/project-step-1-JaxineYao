@@ -8,4 +8,4 @@ python:
   - "3.9"
 # command to run tests
 script:
-  - python -m unittest discover -s test -p "modified_test_main.py"
+  - python -m unittest test/modified_test_main.py
